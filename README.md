@@ -1,3 +1,3 @@
 ## Hola amiguitos
 
-This branch is a snapshot of the current lineage-18.1 branch LineageOS device tree, with the unmerged lineage-18.1 (Android 11) bringup patchset from the LOS gerrit merged in, to use as a basis for our device tree. 
+This branch is a work-in-progress for adapting crDroid 7 device trees to run on Illusion kernel, and re-add DeviceSettings in place of lineage-sdk device-specific pieces, due to lack of kernel support. 
