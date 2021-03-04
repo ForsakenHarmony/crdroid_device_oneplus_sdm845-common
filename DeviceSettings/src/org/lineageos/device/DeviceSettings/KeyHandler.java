@@ -82,8 +82,6 @@ public class KeyHandler implements DeviceKeyHandler {
         sSupportedSliderRingModes.put(Constants.KEY_VALUE_NORMAL, AudioManager.RINGER_MODE_NORMAL);
     }
 
-    private static Toast mToast;
-
     public static final String CLIENT_PACKAGE_NAME = "com.oneplus.camera";
     public static final String CLIENT_PACKAGE_PATH = "/data/misc/lineageos/client_package_name";
 
@@ -125,8 +123,6 @@ public class KeyHandler implements DeviceKeyHandler {
         mContext = context;
         mResContext = getResContext(context);
         mSysUiContext = ActivityThread.currentActivityThread().getSystemUiContext();
-        mHandler = new Handler(Looper.getMainLooper());
-        mDispOn = true;
         mPowerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         mNotificationManager
                 = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -298,3 +294,4 @@ public class KeyHandler implements DeviceKeyHandler {
         }
     }
 }
+
