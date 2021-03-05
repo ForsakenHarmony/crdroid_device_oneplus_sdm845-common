@@ -1,6 +1,7 @@
 #
 # Copyright (C) 2013 The CyanogenMod Project
 # Copyright (C) 2017 The LineageOS Project
+# Copyright (C) 2019 Android Open Source Illusion Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -35,7 +36,8 @@ LOCAL_RESOURCE_DIR := \
     $(TOP)/packages/resources/devicesettings/res
 
 LOCAL_STATIC_JAVA_LIBRARIES := \
-    vendor.oneplus.camera.CameraHIDL-V1.0-java
+    vendor.oneplus.camera.CameraHIDL-V1.0-java \
+    org.lineageos.platform.internal
 
 package_resource_overlays := $(strip \
     $(wildcard $(foreach dir, $(PRODUCT_PACKAGE_OVERLAYS), \
