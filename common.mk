@@ -107,6 +107,13 @@ PRODUCT_PACKAGES += \
     libvulkan \
     vendor.display.config@1.0
 
+# GoogleCamera
+PRODUCT_PACKAGES += \
+    GoogleCamera
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/GCam/privapp_whitelist_com.google.android.GoogleCamera.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp_whitelist_com.google.android.GoogleCamera.xml
+
 # HIDL
 PRODUCT_PACKAGES += \
     libhidltransport \
