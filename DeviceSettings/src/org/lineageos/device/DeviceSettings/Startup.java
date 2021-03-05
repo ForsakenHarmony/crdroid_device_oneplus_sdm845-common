@@ -30,6 +30,8 @@ import android.util.Log;
 import android.widget.Toast;
 import java.util.List;
 
+import org.lineageos.device.DeviceSettings.TouchscreenGestureSettings;
+
 public class Startup extends BroadcastReceiver {
 
     private static final boolean DEBUG = false;
@@ -43,10 +45,11 @@ public class Startup extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent bootintent) {
-        if (DEBUG) 
+        if (DEBUG)
             Log.d(TAG, "Received boot completed intent");
 
         boolean enabled = false;
+        TouchscreenGestureSettings.MainSettingsFragment.restoreTouchscreenGestureStates(context);
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         enabled = sharedPrefs.getBoolean(DeviceSettings.KEY_HBM_SWITCH, false);
         if (enabled) {
@@ -55,6 +58,18 @@ public class Startup extends BroadcastReceiver {
         enabled = sharedPrefs.getBoolean(DeviceSettings.KEY_DC_SWITCH, false);
         if (enabled) {
         restore(DCModeSwitch.getFile(), enabled);
+               }
+        enabled = sharedPrefs.getBoolean(DeviceSettings.KEY_SRGB_SWITCH, false);
+        if (enabled) {
+        restore(SRGBModeSwitch.getFile(), enabled);
+               }
+        enabled = sharedPrefs.getBoolean(DeviceSettings.KEY_DCI_SWITCH, false);
+        if (enabled) {
+        restore(DCIModeSwitch.getFile(), enabled);
+               }
+        enabled = sharedPrefs.getBoolean(DeviceSettings.KEY_WIDE_SWITCH, false);
+        if (enabled) {
+        restore(WideModeSwitch.getFile(), enabled);
                }
         enabled = sharedPrefs.getBoolean(DeviceSettings.KEY_FPS_INFO, false);
         if (enabled) {
@@ -70,7 +85,7 @@ public class Startup extends BroadcastReceiver {
             }
         }
 
-        if (DEBUG) 
+        if (DEBUG)
             Log.d(TAG, "We are" + mSetupRunning + "running in setup");
 
         if(!mSetupRunning) {
@@ -81,14 +96,14 @@ public class Startup extends BroadcastReceiver {
 			}
             SharedPreferences sharedpreferences = context.getSharedPreferences("selinux_pref", Context.MODE_PRIVATE);
 
-            if (DEBUG) 
+            if (DEBUG)
                 Log.d(TAG, "sharedpreferences.contains(" + PREF_SELINUX_MODE + "): " + (sharedpreferences.contains(PREF_SELINUX_MODE) ? "True":"False"));
 
             if (sharedpreferences.contains(PREF_SELINUX_MODE)) {
                 boolean currentIsSelinuxEnforcing = SELinux.isSELinuxEnforced();
                 boolean isSelinuxEnforcing = sharedpreferences.getBoolean(PREF_SELINUX_MODE, currentIsSelinuxEnforcing);
 
-                if (DEBUG) 
+                if (DEBUG)
                     Log.d(TAG, String.format("currentIsSelinuxEnforcing: %s, isSelinuxEnforcing: %s", (currentIsSelinuxEnforcing ? "True" : "False"), (isSelinuxEnforcing ? "True" : "False")));
 
                 try {
@@ -114,6 +129,8 @@ public class Startup extends BroadcastReceiver {
         }
 
         VibratorStrengthPreference.restore(context);
+        VibratorCallStrengthPreference.restore(context);
+        VibratorNotifStrengthPreference.restore(context);
         Utils.enableService(context);
     }
 
