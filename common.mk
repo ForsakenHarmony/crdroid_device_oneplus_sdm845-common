@@ -86,7 +86,8 @@ PRODUCT_PACKAGES_DEBUG += \
 # Camera
 PRODUCT_PACKAGES += \
     libcvface_api \
-    Snap
+    Snap \
+    GoogleCamera
 
 # Common init scripts
 PRODUCT_PACKAGES += \
