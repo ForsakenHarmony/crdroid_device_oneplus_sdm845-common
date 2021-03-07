@@ -30,8 +30,6 @@ import android.util.Log;
 import android.widget.Toast;
 import java.util.List;
 
-import org.lineageos.device.DeviceSettings.TouchscreenGestureSettings;
-
 public class Startup extends BroadcastReceiver {
 
     private static final boolean DEBUG = false;
@@ -49,7 +47,6 @@ public class Startup extends BroadcastReceiver {
             Log.d(TAG, "Received boot completed intent");
 
         boolean enabled = false;
-        TouchscreenGestureSettings.MainSettingsFragment.restoreTouchscreenGestureStates(context);
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         enabled = sharedPrefs.getBoolean(DeviceSettings.KEY_HBM_SWITCH, false);
         if (enabled) {

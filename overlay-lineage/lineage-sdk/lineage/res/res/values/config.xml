@@ -33,7 +33,6 @@
     <string-array name="config_deviceKeyHandlerClasses" translatable="false">
         <item>org.lineageos.lineageparts.gestures.KeyHandler</item>
         <item>org.lineageos.device.DeviceSettings.KeyHandler</item>
-        <item>org.lineageos.device.DeviceSettings.TouchKeyHandler</item>
         <item>org.lineageos.camerahelper.KeyHandler</item>
     </string-array>
 
