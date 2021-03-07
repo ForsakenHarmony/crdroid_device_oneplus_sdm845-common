@@ -67,7 +67,6 @@ public class Startup extends BroadcastReceiver {
         enabled = sharedPrefs.getBoolean(DeviceSettings.KEY_WIDE_SWITCH, false);
         if (enabled) {
         restore(WideModeSwitch.getFile(), enabled);
-               }
        }
 
         mContext = context;
