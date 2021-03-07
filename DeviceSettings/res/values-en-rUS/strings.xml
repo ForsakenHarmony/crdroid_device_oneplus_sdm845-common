@@ -40,18 +40,6 @@
     <string name="wide_mode_title">Wide color gamut mode</string>
     <string name="wide_mode_summary"></string>
 
-    <!-- Refresh rate -->
-    <string name="refresh_title">Screen refresh</string>
-    <string name="tile_refresh_rate">Screen refresh rate</string>
-    <string name="auto_refresh_rate_summary">Let apps decide what refresh rate to use</string>
-    <string name="auto_refresh_rate_title">Auto refresh mode</string>
-    <string name="refresh_rate_summary">Choose between 60Hz or 120Hz peak refresh</string>
-    <string name="refresh_rate_title">Force 120Hz peak refresh rate</string>
-    <string name="refresh_rate_warning">Using forced 120Hz will impact battery life significantly</string>
-    <string name="fps_info_title">FPS overlay</string>
-    <string name="fps_info_summary">Show overlay with with current frames per second</string>
-    <string name="panel_mode_info">Disable panel mode requires reboot.</string>
-
     <!-- Notification slider -->
     <string name="notification_slider_category_title">Notification slider</string>
     <string name="notification_slider_selection_dialog_title">Action</string>
@@ -104,11 +92,4 @@
     <string name="quick_settings_log_tile_dialog_title">Options</string>
     <string name="cannot_get_su">Action failed because of missing superuser access</string>
     
-    <!-- Dolby Atmos -->
-    <string name="audio_title">Dolby Atmos</string>
-    <string name="dolby_title">Configuration</string>
-    <string name="dolby_summary">Configure the audio output based on media content.</string>
-    <string name="enable_dolby_title">Enable/Disable Dolby Atmos</string>
-    <string name="enable_dolby_summary">Switching REQUIRES a reboot to take effect!</string>
-    <string name="enable_dolby_info">Note: With Dolby Atmos enabled, other EQ effects like MusicFX are disabled on all outputs.</string>
 </resources>

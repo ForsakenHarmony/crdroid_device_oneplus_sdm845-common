@@ -57,7 +57,6 @@ import org.lineageos.device.DeviceSettings.SuTask;
 public class DeviceSettings extends PreferenceFragment
         implements Preference.OnPreferenceChangeListener {
 
-    private static final String KEY_ENABLE_DOLBY_ATMOS = "enable_dolby_atmos";
     private static final String KEY_CATEGORY_GRAPHICS = "graphics";
     public static final String KEY_HBM_SWITCH = "hbm";
     public static final String KEY_AUTO_HBM_SWITCH = "auto_hbm";
@@ -66,10 +65,6 @@ public class DeviceSettings extends PreferenceFragment
     public static final String KEY_SRGB_SWITCH = "srgb";
     public static final String KEY_DCI_SWITCH = "dci";
     public static final String KEY_WIDE_SWITCH = "wide";
-    private static final String KEY_CATEGORY_REFRESH = "refresh";
-    public static final String KEY_REFRESH_RATE = "refresh_rate";
-    public static final String KEY_AUTO_REFRESH_RATE = "auto_refresh_rate";
-    public static final String KEY_FPS_INFO = "fps_info";
 
     public static final String KEY_VIBSTRENGTH = "vib_strength";
     public static final String KEY_CALL_VIBSTRENGTH = "vib_call_strength";
@@ -81,13 +76,9 @@ public class DeviceSettings extends PreferenceFragment
     private static final String PREF_SELINUX_MODE = "selinux_mode";
     private static final String PREF_SELINUX_PERSISTENCE = "selinux_persistence";
 
-    private static TwoStatePreference mEnableDolbyAtmos;
     private static TwoStatePreference mHBMModeSwitch;
     private static TwoStatePreference mAutoHBMSwitch;
     private static TwoStatePreference mDCModeSwitch;
-    private static TwoStatePreference mRefreshRate;
-    private static SwitchPreference mAutoRefreshRate;
-    private static SwitchPreference mFpsInfo;
     private ListPreference mTopKeyPref;
     private ListPreference mMiddleKeyPref;
     private ListPreference mBottomKeyPref;
@@ -132,9 +123,6 @@ public class DeviceSettings extends PreferenceFragment
         mBottomKeyPref.setValueIndex(Constants.getPreferenceInt(getContext(), Constants.NOTIF_SLIDER_BOTTOM_KEY));
         mBottomKeyPref.setOnPreferenceChangeListener(this);
 
-        mEnableDolbyAtmos = (TwoStatePreference) findPreference(KEY_ENABLE_DOLBY_ATMOS);
-        mEnableDolbyAtmos.setOnPreferenceChangeListener(this);
-
         mDCModeSwitch = (TwoStatePreference) findPreference(KEY_DC_SWITCH);
         mDCModeSwitch.setEnabled(DCModeSwitch.isSupported());
         mDCModeSwitch.setChecked(DCModeSwitch.isCurrentlyEnabled(this.getContext()));
@@ -148,24 +136,6 @@ public class DeviceSettings extends PreferenceFragment
         mAutoHBMSwitch = (TwoStatePreference) findPreference(KEY_AUTO_HBM_SWITCH);
         mAutoHBMSwitch.setChecked(PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(DeviceSettings.KEY_AUTO_HBM_SWITCH, false));
         mAutoHBMSwitch.setOnPreferenceChangeListener(this);
-
-        if (getResources().getBoolean(R.bool.config_deviceHasHighRefreshRate)) {
-            boolean autoRefresh = AutoRefreshRateSwitch.isCurrentlyEnabled(this.getContext());
-            mAutoRefreshRate = (SwitchPreference) findPreference(KEY_AUTO_REFRESH_RATE);
-            mAutoRefreshRate.setChecked(autoRefresh);
-            mAutoRefreshRate.setOnPreferenceChangeListener(this);
-
-            mRefreshRate = (TwoStatePreference) findPreference(KEY_REFRESH_RATE);
-            mRefreshRate.setChecked(RefreshRateSwitch.isCurrentlyEnabled(this.getContext()));
-            mRefreshRate.setOnPreferenceChangeListener(this);
-            updateRefreshRateState(autoRefresh);
-
-            mFpsInfo = (SwitchPreference) findPreference(KEY_FPS_INFO);
-            mFpsInfo.setChecked(prefs.getBoolean(KEY_FPS_INFO, false));
-            mFpsInfo.setOnPreferenceChangeListener(this);
-        } else {
-            getPreferenceScreen().removePreference((Preference) findPreference(KEY_CATEGORY_REFRESH));
-        }
 
         // SELinux
         boolean isRooted = SuShell.detectValidSuInPath();
@@ -186,16 +156,7 @@ public class DeviceSettings extends PreferenceFragment
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference == mFpsInfo) {
-            boolean enabled = (Boolean) newValue;
-            Intent fpsinfo = new Intent(this.getContext(),
-                    org.lineageos.device.DeviceSettings.FPSInfoService.class);
-            if (enabled) {
-                this.getContext().startService(fpsinfo);
-            } else {
-                this.getContext().stopService(fpsinfo);
-            }
-        } else if (preference == mAutoHBMSwitch) {
+        if (preference == mAutoHBMSwitch) {
             Boolean enabled = (Boolean) newValue;
             SharedPreferences.Editor prefChange = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
             prefChange.putBoolean(KEY_AUTO_HBM_SWITCH, enabled).commit();
@@ -206,18 +167,6 @@ public class DeviceSettings extends PreferenceFragment
             setSelinuxEnabled(enabled, mSelinuxPersistence.isChecked());
         } else if (preference == mSelinuxPersistence) {
             setSelinuxEnabled(mSelinuxMode.isChecked(), (Boolean) newValue);
-        } else if (preference == mAutoRefreshRate) {
-            Boolean enabled = (Boolean) newValue;
-            Settings.System.putFloat(getContext().getContentResolver(),
-                    Settings.System.PEAK_REFRESH_RATE, 120f);
-            Settings.System.putFloat(getContext().getContentResolver(),
-                    Settings.System.MIN_REFRESH_RATE, 60f);
-            Settings.System.putInt(getContext().getContentResolver(),
-                    AutoRefreshRateSwitch.SETTINGS_KEY, enabled ? 1 : 0);
-            updateRefreshRateState(enabled);
-        } else if (preference == mRefreshRate) {
-            Boolean enabled = (Boolean) newValue;
-            RefreshRateSwitch.setPeakRefresh(getContext(), enabled);
         } else if (preference == mHBMModeSwitch) {
             Boolean enabled = (Boolean) newValue;
             Utils.writeValue(HBMModeSwitch.getFile(), enabled ? "5" : "0");
@@ -227,22 +176,6 @@ public class DeviceSettings extends PreferenceFragment
                 this.getContext().startService(hbmIntent);
             } else {
                 this.getContext().stopService(hbmIntent);
-            }
-        } else if (preference == mEnableDolbyAtmos) {
-            boolean enabled = (Boolean) newValue;
-            Intent daxService = new Intent();
-            ComponentName name = new ComponentName("com.dolby.daxservice", "com.dolby.daxservice.DaxService");
-            daxService.setComponent(name);
-            if (enabled) {
-                // enable service component and start service
-                this.getContext().getPackageManager().setComponentEnabledSetting(name,
-                        PackageManager.COMPONENT_ENABLED_STATE_DEFAULT, 0);
-                this.getContext().startService(daxService);
-            } else {
-                // disable service component and stop service
-                this.getContext().stopService(daxService);
-                this.getContext().getPackageManager().setComponentEnabledSetting(name,
-                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED, 0);
             }
         } else {
             Constants.setPreferenceInt(getContext(), preference.getKey(),
@@ -306,9 +239,5 @@ public class DeviceSettings extends PreferenceFragment
           setSelinuxEnabled(SELinux.isSELinuxEnforced(), mSelinuxPersistence.isChecked());
         }
       }
-    }
-    private void updateRefreshRateState(boolean auto) {
-        mRefreshRate.setEnabled(!auto);
-        if (auto) mRefreshRate.setChecked(false);
     }
 }

@@ -49,11 +49,12 @@ public class Constants {
     public static final int KEY_VALUE_NORMAL = 4;
 
     // TriStateUI Modes
-    public static final int MODE_TOTAL_SILENCE = 605;
-    public static final int MODE_PRIORITY_ONLY = 604;
-    public static final int MODE_VIBRATE = 602;
-    public static final int MODE_RING = 601;
-    public static final int MODE_SILENT = 603;
+    public static final int MODE_TOTAL_SILENCE = 600;
+    public static final int MODE_ALARMS_ONLY = 601;
+    public static final int MODE_PRIORITY_ONLY = 602;
+    public static final int MODE_VIBRATE = 604;
+    public static final int MODE_RING = 605;
+    public static final int MODE_SILENT = 620;
 
     public static final Map<String, String> sStringKeyPreferenceMap = new HashMap<>();
     public static final Map<Integer, String> sKeyMap = new HashMap<>();

@@ -68,9 +68,6 @@ public class Startup extends BroadcastReceiver {
         if (enabled) {
         restore(WideModeSwitch.getFile(), enabled);
                }
-        enabled = sharedPrefs.getBoolean(DeviceSettings.KEY_FPS_INFO, false);
-        if (enabled) {
-            context.startService(new Intent(context, FPSInfoService.class));
        }
 
         mContext = context;
