@@ -46,6 +46,7 @@
 
         <Preference
             android:key="panel_category"
+            android:icon="@drawable/ic_panel_tile"
             android:title="@string/panel_category_title"
             android:summary="@string/panel_category_summary"
             android:persistent="false" >
